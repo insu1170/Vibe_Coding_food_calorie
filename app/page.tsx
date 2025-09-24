@@ -1,19 +1,28 @@
 'use client';
 
 import { useState } from 'react';
+import { MealUpload } from '@/components/MealUpload';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Home() {
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [showMealUpload, setShowMealUpload] = useState(false);
+  const { bypassLogin, user, isAnonymousUser } = useAuth();
+
+  const handleStartNowClick = () => {
+    // 로그인 없이도 바로 업로드 기능 사용 가능
+    setShowMealUpload(true);
+  };
 
   const handleDemoClick = () => {
     setIsDemoMode(true);
-    // 임시로 대시보드 페이지로 이동 (나중에 실제 구현)
-    alert('데모 모드입니다! 실제 서비스에서는 식단 기록과 분석 기능을 체험하실 수 있습니다.');
+    // 실제 대시보드 페이지로 이동
+    window.location.href = '/dashboard';
   };
 
   const handleLoginClick = () => {
-    // 임시 로그인 (나중에 실제 구현)
-    alert('로그인 기능은 개발 중입니다. 데모 버튼을 클릭하여 기능을 체험해보세요!');
+    // 실제 대시보드 페이지로 이동 (로그인 bypass)
+    window.location.href = '/dashboard';
   };
 
   return (
@@ -62,11 +71,11 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
-                onClick={handleDemoClick}
+                onClick={handleStartNowClick}
                 className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 <span className="flex items-center">
-                  📸 지금 시작하기
+                  📸 로그인 없이 시작하기
                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -253,10 +262,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={handleDemoClick}
+              onClick={handleStartNowClick}
               className="px-8 py-4 bg-white text-blue-600 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg"
             >
-              🚀 무료로 시작하기
+              🚀 로그인 없이 무료로 시작하기
             </button>
             <button
               onClick={handleLoginClick}
@@ -335,13 +344,43 @@ export default function Home() {
               </button>
               <button
                 onClick={() => {
-                  alert('대시보드 페이지가 준비 중입니다! 곧 완성될 예정입니다.');
                   setIsDemoMode(false);
+                  window.location.href = '/dashboard';
                 }}
                 className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
               >
                 대시보드 보기
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Meal Upload Modal */}
+      {showMealUpload && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">🍽️ 식단 기록 시작하기</h3>
+              <button
+                onClick={() => setShowMealUpload(false)}
+                className="text-gray-400 hover:text-gray-600 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            <div className="mb-6">
+              <p className="text-gray-600 leading-relaxed">
+                <strong className="text-green-600">💡 로그인 없이 무료로 사용</strong>할 수 있습니다!<br />
+                음식 사진을 업로드하면 AI가 자동으로 분석하고 칼로리를 계산해드립니다.<br />
+                <strong className="text-blue-600">나중에 로그인하면</strong> 모든 기록이 계정과 동기화됩니다! 📸
+              </p>
+            </div>
+            <MealUpload />
+            <div className="mt-6 pt-6 border-t border-gray-200 text-center">
+              <p className="text-sm text-gray-500">
+                업로드 완료 후 자동으로 대시보드로 이동합니다
+              </p>
             </div>
           </div>
         </div>
