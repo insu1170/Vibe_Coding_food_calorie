@@ -48,9 +48,9 @@ PRD
 
 #### **6. n8n 웹훅 연동 명세 (n8n Webhook Integration) - ⭐ 시간 기반 자동 분류**
 
-- **Request (Next.js → n8n):**
+- **Request (Next.js Server Actions → n8n):**
 
-  - Next.js는 이미지 파일과 사용자 ID만을 `multipart/form-data` 형식으로 n8n 웹훅에 POST 요청한다. **끼니 정보는 절대 포함하지 않는다.**
+  - Next.js Server Actions는 이미지 파일과 사용자 ID만을 `multipart/form-data` 형식으로 n8n 웹훅에 POST 요청한다. **끼니 정보는 절대 포함하지 않는다.**
   - **요청 데이터:**
     1.  `image`: 실제 이미지 바이너리 파일
     2.  `userId`: Supabase에서 인증된 사용자의 ID
@@ -74,7 +74,7 @@ PRD
       - **[Step 1]에서 자동 판별한 `mealType`**
   6.  **[Step 5] 결과 반환:** 모든 과정이 성공하면 프론트엔드에 성공 응답을, 중간에 실패하면 실패 응답을 보낸다.
 
-- **Response (n8n → Next.js):**
+- **Response (n8n → Next.js Server Actions):**
   - - **성공 시** 응답 본문 예시 (사진에 밥, 김치찌개, 계란말이가 있는 경우):
     ```json
     {
